@@ -1,0 +1,56 @@
+#include <iostream>
+#include <cstdlib>
+class DynamicArray {
+private:
+    int* array;
+    int size;
+    int capacity;
+public:
+    DynamicArray() {
+        capacity = 10; 
+        size = 0;
+        array = new int[capacity];
+    }
+    ~DynamicArray() {
+        delete[] array;
+    }
+    void push_back(int value) {
+        if (size == capacity) {
+            capacity *= 2;
+            int* newArray = new int[capacity];
+            for (int i = 0; i < size; ++i) {
+                newArray[i] = array[i];
+            }
+            delete[] array;
+            array = newArray;
+        }
+        array[size++] = value;
+    }
+    int at(int index) {
+        if (index < 0 || index >= size) {
+            std::cerr << "Error: Index out of bounds\n";
+            std::exit(EXIT_FAILURE);
+        }
+        return array[index];
+    }
+    int getSize() {
+        return size;
+    }
+    int getCapacity() {
+        return capacity;
+    }
+};
+int main() {
+    DynamicArray myArray;
+    for (int i = 0; i < 15; ++i) {
+        myArray.push_back(i);
+    }
+    std::cout << "Array elements:\n";
+    for (int i = 0; i < myArray.getSize(); ++i) {
+        std::cout << myArray.at(i) << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "Array size: " << myArray.getSize() << std::endl;
+    std::cout << "Array capacity: " << myArray.getCapacity() << std::endl;
+    return 0;
+}
